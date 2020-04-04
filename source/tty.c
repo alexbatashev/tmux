@@ -83,6 +83,13 @@ static void	tty_default_attributes(struct tty *, struct window_pane *,
 #define TTY_BLOCK_START(tty) (1 + ((tty)->sx * (tty)->sy) * 8)
 #define TTY_BLOCK_STOP(tty) (1 + ((tty)->sx * (tty)->sy) / 8)
 
+
+extern int
+tmux_b64_pton(
+    char const *src,
+    u_char *target,
+    size_t targsize);
+
 void
 tty_create_log(void)
 {
@@ -1896,7 +1903,7 @@ tty_cmd_setselection(struct tty *tty, const struct tty_ctx *ctx)
 	off = 4 * ((ctx->num + 2) / 3) + 1; /* storage for base64 */
 	buf = xmalloc(off);
 
-	b64_ntop(ctx->ptr, ctx->num, buf, off);
+	tmux_b64_ntop(ctx->ptr, ctx->num, buf, off);
 	tty_putcode_ptr2(tty, TTYC_MS, "", buf);
 
 	free(buf);

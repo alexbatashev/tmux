@@ -25,8 +25,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "compat.h"
-#include "imsg.h"
+#include <compat.h>
+#include <compat/imsg.h>
 
 int	 imsg_fd_overhead = 0;
 

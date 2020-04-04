@@ -26,8 +26,13 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "compat.h"
-#include "imsg.h"
+#include <compat.h>
+#include <compat/imsg.h>
+
+// fixme real IOV_MAX
+#ifndef IOV_MAX
+#define IOV_MAX 1024
+#endif
 
 static int	ibuf_realloc(struct ibuf *, size_t);
 static void	ibuf_enqueue(struct msgbuf *, struct ibuf *);

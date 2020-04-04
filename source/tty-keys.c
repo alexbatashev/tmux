@@ -30,6 +30,11 @@
 
 #include "tmux.h"
 
+extern int
+tmux_b64_pton(
+    char const *src,
+    u_char *target,
+    size_t targsize);
 /*
  * Handle keys input from the outside terminal. tty_default_*_keys[] are a base
  * table of supported keys which are looked up in terminfo(5) and translated
@@ -992,7 +997,7 @@ tty_keys_clipboard(__unused struct tty *tty, const char *buf, size_t len,
 	/* Convert from base64. */
 	needed = (end / 4) * 3;
 	out = xmalloc(needed);
-	if ((outlen = b64_pton(copy, out, len)) == -1) {
+	if ((outlen = tmux_b64_pton(copy, out, len)) == -1) {
 		free(out);
 		free(copy);
 		return (0);

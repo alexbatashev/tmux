@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include "compat.h"
+#include "tmux.h"
 
 int
 setenv(const char *name, const char *value, __unused int overwrite)

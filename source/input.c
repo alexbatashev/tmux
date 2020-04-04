@@ -28,6 +28,17 @@
 
 #include "tmux.h"
 
+extern int
+tmux_b64_ntop(u_char const *src,
+              size_t srclength,
+              char *target,
+              size_t targsize);
+extern int
+tmux_b64_pton(
+    char const *src,
+    u_char *target,
+    size_t targsize);
+
 /*
  * Based on the description by Paul Williams at:
  *
@@ -2563,7 +2574,7 @@ input_osc_52(struct input_ctx *ictx, const char *p)
 			buf = paste_buffer_data(pb, &len);
 			outlen = 4 * ((len + 2) / 3) + 1;
 			out = xmalloc(outlen);
-			if ((outlen = b64_ntop(buf, len, out, outlen)) == -1) {
+			if ((outlen = tmux_b64_ntop(buf, len, out, outlen)) == -1) {
 				free(out);
 				return;
 			}
@@ -2587,7 +2598,7 @@ input_osc_52(struct input_ctx *ictx, const char *p)
 		return;
 
 	out = xmalloc(len);
-	if ((outlen = b64_pton(end, out, len)) == -1) {
+	if ((outlen = tmux_b64_pton(end, out, len)) == -1) {
 		free(out);
 		return;
 	}
