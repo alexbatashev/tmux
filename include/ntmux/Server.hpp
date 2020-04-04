@@ -10,11 +10,16 @@
 // the License.
 //===----------------------------------------------------------------------===//
 
-#include <catch2/catch.hpp>
+#ifndef CPP_TMUX_SERVER_HPP
+#define CPP_TMUX_SERVER_HPP
 
-#include <ntmux/Window.hpp>
+#include "Multiplexer.grpc.pb.h"
 
-TEST_CASE( "Window creation" ) {
-  Window w(0, 0, 0, 0);
-  REQUIRE(true);
-}
+class Server final : public ntmux::Multiplexer::Service {
+public:
+  grpc::Status executeCommand(::grpc::ServerContext *context,
+                              const ::ntmux::Command *request,
+                              ::ntmux::ExecutionStatus *response) override;
+};
+
+#endif // CPP_TMUX_SERVER_HPP

@@ -12,7 +12,27 @@
 
 #include <ntmux/Window.hpp>
 
+#include "cxxopts.hpp"
+
+#include "Multiplexer.pb.h"
+
+#include <iostream>
+
 /// \file main.cpp
 /// For now, it is just a stub cpp file to make target compilable
 
-int main() { return 0; }
+int main(int argc, char *argv[]) {
+  cxxopts::Options opts("NeoTmux", "Terminal multiplexer");
+  opts.add_options()
+      ("command", "command", cxxopts::value<std::string>())
+      ("s", "Session name", cxxopts::value<std::string>());
+
+  opts.parse_positional("command");
+
+  auto result = opts.parse(argc, argv);
+
+  std::cout << result["command"].as<std::string>() << std::endl;
+  std::cout << result["s"].as<std::string>() << std::endl;
+
+  return 0;
+}

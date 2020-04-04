@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ntmux;
+
+service Multiplexer {
+    rpc executeCommand (Command) returns (ExecutionStatus) {}
+}
+
+message Command {
+    string cli = 1;
+}
+
+message ExecutionStatus {
+    string status = 1;
+    string output = 2;
+}

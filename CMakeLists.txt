@@ -117,7 +117,7 @@ add_executable(tmux
 	source/screen.c
 	source/server-client.c
 	source/server-fn.c
-	source/server.c
+		source/server_helpers.c
 	source/session.c
 	source/spawn.c
 	source/status.c
@@ -135,7 +135,7 @@ add_executable(tmux
 	source/window-tree.c
 	source/window.c
 	source/xmalloc.c
-	source/xterm-keys
+	source/xterm-keys.c
     source/osdep-linux.c # todo support other platforms
     ${BISON_TmuxParser_OUTPUTS} # todo look for a way to remove bison
 )
@@ -153,13 +153,43 @@ elseif(CURSES_HAVE_NCURSES_H)
   target_compile_definitions(tmux PRIVATE HAVE_NCURSES_H)
 endif()
 
+find_package(Protobuf REQUIRED)
+find_package(GRPC REQUIRED)
 
-add_executable(ntmux
-		source/main.cpp
-		source/Window.cpp)
+set(PROTOS
+		${CMAKE_CURRENT_SOURCE_DIR}/proto/Multiplexer.proto
+		)
 
-target_include_directories(ntmux PRIVATE include)
+set(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto-src)
+file(MAKE_DIRECTORY ${PROTO_SRC_DIR})
+
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+grpc_generate_cpp(GRPC_SRCS GRPC_HDRS ${PROTO_SRC_DIR} ${PROTOS})
+
+
+set(NTMUX_SRC
+		source/Window.cpp
+		source/Client.cpp
+		source/Server.cpp
+		${PROTO_SRCS}
+		${GRPC_SRCS} source/Server.cpp)
+
+add_library(ntmux_core STATIC ${NTMUX_SRC})
+add_executable(ntmux source/main.cpp)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${PROTO_SRC_DIR}) # todo figure out if there's a way to get rid of this
+
+add_subdirectory(contrib/Catch2)
+add_subdirectory(contrib/cxxopts)
+
+target_link_libraries(ntmux_core PUBLIC
+		gRPC::grpc++_reflection
+		protobuf::libprotobuf)
+target_include_directories(ntmux_core PUBLIC include ${PROTO_SRC_DIR})
+
+target_link_libraries(ntmux PRIVATE
+						ntmux_core
+						cxxopts::cxxopts)
 
 enable_testing()
-add_subdirectory(contrib/Catch2)
 add_subdirectory(tests)

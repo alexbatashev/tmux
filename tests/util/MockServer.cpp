@@ -10,11 +10,10 @@
 // the License.
 //===----------------------------------------------------------------------===//
 
-#include <catch2/catch.hpp>
-
-#include <ntmux/Window.hpp>
-
-TEST_CASE( "Window creation" ) {
-  Window w(0, 0, 0, 0);
-  REQUIRE(true);
+#include "MockServer.hpp"
+grpc::Status MockServer::executeCommand(::grpc::ServerContext *context,
+                                        const ::ntmux::Command *request,
+                                        ::ntmux::ExecutionStatus *response) {
+  response->set_status("OK");
+  return grpc::Status::OK;
 }

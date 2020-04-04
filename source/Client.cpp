@@ -10,11 +10,4 @@
 // the License.
 //===----------------------------------------------------------------------===//
 
-#include <catch2/catch.hpp>
-
-#include <ntmux/Window.hpp>
-
-TEST_CASE( "Window creation" ) {
-  Window w(0, 0, 0, 0);
-  REQUIRE(true);
-}
+#include <ntmux/Client.hpp>
