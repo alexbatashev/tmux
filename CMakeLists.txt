@@ -181,8 +181,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${PROTO_SRC_DIR}) # todo figure 
 
 add_subdirectory(contrib/Catch2)
 add_subdirectory(contrib/cxxopts)
+add_subdirectory(contrib/imtui)
 
 target_link_libraries(ntmux_core PUBLIC
+		imtui-ncurses
 		gRPC::grpc++_reflection
 		protobuf::libprotobuf)
 target_include_directories(ntmux_core PUBLIC include ${PROTO_SRC_DIR})
