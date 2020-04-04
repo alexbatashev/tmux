@@ -152,3 +152,14 @@ if(CURSES_HAVE_CURSES_H)
 elseif(CURSES_HAVE_NCURSES_H)
   target_compile_definitions(tmux PRIVATE HAVE_NCURSES_H)
 endif()
+
+
+add_executable(ntmux
+		source/main.cpp
+		source/Window.cpp)
+
+target_include_directories(ntmux PRIVATE include)
+
+enable_testing()
+add_subdirectory(contrib/Catch2)
+add_subdirectory(tests)
