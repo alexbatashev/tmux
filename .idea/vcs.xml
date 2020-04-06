@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/Catch2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/cxxopts" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/imtui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/contrib/imtui/third-party/imgui/imgui" vcs="Git" />
   </component>
 </project>
